@@ -6,7 +6,7 @@ RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt-get install -y --no-install-recommends \
         autoconf automake autopoint gettext texinfo gperf flex gcc git isc-dhcp-client \
-        libidn2-0 libc6 libpsl-dev libpcre3-dev pkg-config libzstd-dev libssl-dev jq \
+        libidn2-0 libc6 libpsl-dev libpcre3-dev pkg-config libzstd-dev libssl-dev zstd \
         libgnutls28-dev liblua5.1-0 liblua5.1-0-dev make net-tools pciutils sudo \
         python3 python3-pip python3-setuptools rsync software-properties-common wget curl
 #RUN apt-get install -y libc-ares-dev
@@ -18,15 +18,13 @@ RUN git clone --depth 1 --recurse-submodules https://github.com/ArchiveTeam/wget
 WORKDIR /app/wget-lua
 
 RUN ./bootstrap
-RUN ./configure --with-ssl=openssl --without-zstandard
+RUN ./configure --with-ssl=openssl
 RUN make
 
 
 # Production
 
 FROM python:3.9.1-slim-buster
-
-COPY --from=build /app/wget-lua/src/wget /usr/local/bin/wget-at
 
 RUN apt update
 RUN apt upgrade -y
@@ -45,8 +43,9 @@ RUN mkdir projects
 
 RUN git clone --depth 1 --recurse-submodules https://github.com/ArchiveTeam/warrior-code2.git
 
-EXPOSE 8001
-
+COPY --from=build /app/wget-lua/src/wget /usr/local/bin/wget-at
 COPY start.py .
+
+EXPOSE 8001
 
 CMD [ "python", "start.py" ]
