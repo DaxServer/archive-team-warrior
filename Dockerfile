@@ -34,7 +34,7 @@ RUN apt upgrade -y
 RUN apt install -y git liblua5.1-0 rsync luarocks
 
 RUN pip3 install requests warcio zstandard
-RUN pip3 install -e git+https://github.com/SrihariThalla/seesaw-kit.git@b0f46b32b1747d15092cd9e259e72a09cd221240#egg=seesaw
+RUN pip3 install -e git+https://github.com/SrihariThalla/seesaw-kit.git@09591e7ddea637d460dee1841bf609f9a2181ba4#egg=seesaw
 
 WORKDIR /app
 
