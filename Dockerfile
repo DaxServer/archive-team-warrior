@@ -31,6 +31,7 @@ COPY --from=build /app/wget-lua/src/wget /usr/local/bin/wget-at
 RUN apt update
 RUN apt upgrade -y
 RUN apt install -y git liblua5.1-0 rsync
+RUN apt-get install -y luarocks
 
 RUN pip3 install setuptools wheel
 RUN pip3 install requests warcio
